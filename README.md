@@ -14,7 +14,7 @@
 Copy this folder into your Codex skills directory:
 
 ```bash
-git clone https://github.com/<your-github-username>/urban-scanline-mirage.git ~/.codex/skills/urban-scanline-mirage
+git clone https://github.com/ximisins-collab/urban-scanline-mirage.git ~/.codex/skills/urban-scanline-mirage
 ```
 
 Or download the repository as a ZIP and place the folder at:
