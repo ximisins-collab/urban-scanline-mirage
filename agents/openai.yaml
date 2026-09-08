@@ -1,0 +1,7 @@
+interface:
+  display_name: "Urban Scanline Mirage"
+  short_description: "Protected urban subjects inside source-derived scanline fields."
+  default_prompt: "Use $urban-scanline-mirage to rebuild this city photo as a source-derived scanline spatial collage."
+
+policy:
+  allow_implicit_invocation: true
