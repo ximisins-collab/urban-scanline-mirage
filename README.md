@@ -1,34 +1,310 @@
 # 城市扫描线幻景
 
-`urban-scanline-mirage` is a Codex skill for transforming city, street, façade, station, parking-area, and architectural photos into a calm rectilinear scanline collage.
+### 真实人物锚点 · 城市空间抽象 · 横向色层重构
 
-## What it does
+把城市、街道、建筑、车站、市场和公共空间照片，转译为安静、克制、具有空间秩序的扫描线拼贴。
 
-- Preserves a focal person or action unit as a crisp photographic anchor.
-- Rebuilds the surrounding scene from source-derived rectangles, bars, sparse vertical anchors, and horizontal chromatic strata.
-- Keeps sky, ground, architecture, foliage, and wet-surface areas at a consistent degree of stylization.
-- Uses varied hue shifts, line pitch, streak widths, opacity, merging, fading, and interruptions so the material does not look like a uniform CRT overlay.
+`urban-scanline-mirage` 不是给照片叠加一层横线滤镜。它会先判断画面中真正需要保留的行动，再把其余环境重新组织为取自原图的矩形色域、横向色层和少量垂直锚点。
 
-## Install
+> 保留真实行动，重构城市秩序。
 
-Copy this folder into your Codex skills directory:
+[它解决什么](#它解决什么) · [核心逻辑](#核心视觉逻辑) · [快速开始](#快速开始) · [工作流程](#工作流程) · [安装与调用](#安装与调用) · [常见问题](#常见问题)
 
-```bash
-git clone https://github.com/ximisins-collab/urban-scanline-mirage.git ~/.codex/skills/urban-scanline-mirage
+## 它解决什么
+
+普通的“扫描线效果”经常只是把均匀细线覆盖在照片上：人物、天空、道路、车辆和建筑仍然保持原来的写实轮廓，画面看起来更像滤镜、CRT 屏幕或故障艺术，而不是一次完整的视觉转译。
+
+城市扫描线幻景把问题拆成三个可以执行的判断：
+
+1. **什么必须保持真实？** 人物及其正在进行的动作关系。
+2. **什么应该被抽象？** 除保护对象外的全部环境，包括天空和地面。
+3. **怎样让抽象仍然来自原图？** 保留构图、位置、比例、明暗和色彩关系，用不均匀的横向色层重建空间。
+
+最终画面应当仍能认出原来的场所和事件，但不再依赖垃圾桶、车轮、雨伞骨架、树叶、灯具或门窗等具象细节来说明场景。
+
+## 核心视觉逻辑
+
+```text
+原始实景照片
+→ 识别人物与行动关系
+→ 锁定摄影真实锚点
+→ 划分天空、地面与主要空间体块
+→ 从原图提取主色关系
+→ 用矩形色域和非均匀横向色层重构环境
+→ 恢复少量必要的垂直空间锚点
+→ 检查人物、场所识别度与风格强度
 ```
 
-Or download the repository as a ZIP and place the folder at:
+画面的核心关系是：
+
+```text
+清晰、真实、不可替换的行动主体
++
+扁平、克制、来源于原图的城市色层空间
+```
+
+这是一种“摄影锚点与抽象环境并置”的方法。人物不是贴在抽象背景上的装饰，而是画面中唯一保持完整自然轮廓的现实证据。
+
+## 什么保持真实
+
+Skill 会把焦点人物或小型行动群组视为一个完整的“保护行动单元”。通常包括：
+
+- 人物的身份、姿态、动作、服装和所在位置；
+- 人物正在拿、推、骑、修理、操控、倚靠或使用的物品；
+- 维持动作成立所必需的连接，例如伞柄、风筝线、自行车接触点、梯子、工具或手提物；
+- 人物脚下很小范围的接触区域及真实落地阴影。
+
+保护对象应保持摄影质感、正确比例和自然解剖，不应被放大、复制、重绘、扫描线化或重新打光。
+
+附近的车辆、雨伞、人物或道具不会因为“离主体很近”就自动受到保护。只有与主体存在清晰动作关系的部分才会保留。
+
+## 什么会被重构
+
+除保护行动单元以外，画面中的所有区域都应进入同一套抽象语言：
+
+| 原图内容 | 重构方式 |
+| --- | --- |
+| 天空、大墙面、水面、开阔地面 | 宽阔、低对比度的主色区域，内部保留细微而不均匀的横向色层 |
+| 建筑、桥体、站台、店铺或主要空间体量 | 一个或少量超大矩形、横条与相互遮挡的平面色域 |
+| 车辆、垃圾桶、灯具、雨伞、花盆、晾晒物、树木、招牌 | 在原位置压缩为最少量的矩形色彩标记，不保留完整自然轮廓 |
+| 大量重复物体 | 只保留能够说明位置节奏的少量代表，其余合并进所属空间色域 |
+| 柱子、门洞、立面边缘、电杆、梯子 | 仅在场所识别需要时保留为少量窄竖向锚点 |
+| 红、黄、钴蓝、青绿等醒目颜色 | 仅从原图提取，作为少量组织画面的强调色 |
+
+所有非保护形状以正面的方形、矩形、横条或窄竖条出现。空间感来自面积、遮挡、裁切和位置，不依赖立体挤压、倒角、透视侧面或写实环境阴影。
+
+## 色彩与扫描线肌理
+
+扫描线不是全图统一覆盖的网格，而是每个空间色域自身的“材料”。
+
+- 每个主要区域先确定一个来自原图的主色。
+- 在主色附近加入更亮、更暗、略暖、略冷和轻微不纯的近邻色。
+- 混合发丝般细线、中等宽度色带和偶尔出现的宽亮带或暗带。
+- 不同区域的间距、透明度、宽度、断点、融合与渐隐应有所差异。
+- 天空、远景、道路和大墙面保持低对比、低信息密度。
+- 建筑、植物、市场或密集街景可以拥有更丰富的层次，但仍应比原图安静。
+- 色块边界保持清楚、平直；色块内部需要有光学层次，不能像一块无变化的纯色矢量面。
+
+目标不是“线越多越有风格”，而是让线条承担色彩采样、空间压缩和材质过渡。
+
+## 天空与地面的统一
+
+天空和地面最容易成为风格薄弱区。它们应与建筑达到相同的**转化程度**，但保持更低的**信息密度**。
+
+- 天空应成为完整的大色域，不保留写实云层或未处理的摄影开口。
+- 道路、广场和湿地面应成为宽阔的横向色层平面。
+- 可以保留原图中的大方向光路、冷暖关系和远近层次。
+- 水洼、井盖、裂纹和连续镜面倒影应被压缩为少量色带或矩形提示。
+- 人物周围只保留维持落地感所需的小范围接触区，不能留下大片写实走廊。
+
+## 自适应密度
+
+Skill 不使用固定色块数量，也不会让全图拥有相同的扫描线密度。
+
+| 场景类型 | 推荐处理 |
+| --- | --- |
+| 开阔广场、屋顶、滨水或大面积天空 | 用少量大色域建立留白，建筑压缩为稀疏节奏 |
+| 普通街道、站台或社区空间 | 以大体块为主，搭配少量物件标记和垂直锚点 |
+| 市场、老巷、密集立面 | 可以增加矩形重叠，但重复细节必须大幅合并 |
+| 植物或桥下空间 | 保留主色和明暗区域，不逐片描述树叶、藤蔓或混凝土纹理 |
+
+原图越复杂，越需要主动压缩，而不是把每件物品都翻译成一个新色块。
+
+## 适合什么照片
+
+特别适合：
+
+- 城市街道、巷道、市场、车站和公共空间；
+- 现代建筑、老建筑、立面、停车区和桥下空间；
+- 画面中有一位小型人物或一个明确行动群组的照片；
+- 人物正在步行、等待、修理、骑行、打伞、提物或完成某个可见动作；
+- 构图中具有明显天空、道路、墙面、柱列或建筑体块的照片；
+- 希望保留实景记忆，同时降低背景具象度的摄影作品。
+
+不适合作为默认选择：
+
+- 需要完整保留所有背景商品、标识或建筑细节的纪实照片；
+- 以面部、妆容或服装细节为主要目标的近距离肖像；
+- 需要生成霓虹故障、RGB 分离、像素排序或赛博朋克效果的图片；
+- 需要模仿某位在世艺术家个人风格的请求；
+- 没有明确主体，又要求每个物体都保持可辨认的复杂场景。
+
+## 快速开始
+
+上传一张原图后，可以直接这样说：
+
+```text
+使用 $urban-scanline-mirage 修改这张照片。
+保持人物、人物正在使用的物品和真实落地阴影不变，
+把其余城市环境重构为来源于原图色彩的矩形扫描线空间。
+```
+
+如果天空或地面风格偏弱：
+
+```text
+继续使用 $urban-scanline-mirage。
+人物与行动物品保持不变，只加强天空和地面的转化程度，
+让它们与建筑使用同一种横向色层材料，但信息密度更低。
+```
+
+如果色块过于干净：
+
+```text
+保留当前色块分布，加强每个色域内部的色彩肌理。
+使用来源于原图主色的明暗、冷暖和轻微杂色变化，
+让横线宽度、间距、透明度、融合和断点不均匀，避免统一滤镜感。
+```
+
+## 工作流程
+
+| 阶段 | 解决的问题 | 输出判断 |
+| --- | --- | --- |
+| 锁定画面 | 哪些构图条件不能改变？ | 原始比例、视点、地平线、人物位置和总体明暗 |
+| 识别行动 | 什么必须保持摄影真实？ | 人物、动作物品、必要连接、接触区和真实阴影 |
+| 划分空间 | 哪些大区域决定场所？ | 天空、地面、主要建筑、远景开口和左右体块 |
+| 提取色彩 | 抽象之后如何仍然属于原图？ | 每个区域的主色、近邻色和少量强调色 |
+| 重构环境 | 如何减少具象细节？ | 大矩形、横条、少量物件标记和垂直锚点 |
+| 建立肌理 | 如何避免纯色块或统一扫描线？ | 不均匀宽度、间距、透明度、融合、渐隐与断点 |
+| 检查结果 | 是否既像原场景又完成风格转译？ | 人物稳定、空间可辨、背景无写实残留、各区域强度协调 |
+
+生成后应查看整张画面，而不是只检查局部线条。若某一层失败，应只修正该层，保留已经成立的人物、构图和色块关系。
+
+## 质量验收
+
+一张合格结果应同时满足：
+
+1. 人物与行动物品仍然清晰、真实、自然，没有变形或位置漂移。
+2. 原场所能够通过体块、地平线、色彩节奏和少量空间锚点被认出。
+3. 天空、地面、建筑和次要元素都已完成转译，没有大片写实背景残留。
+4. 每个主要区域都像一个宽阔的主色色域，而不是杂乱马赛克。
+5. 色域内部有来源于原图的非均匀横向色层，而不是纯色填充或统一细线覆盖。
+6. 次要物体只能通过位置、颜色、比例和节奏被感知，不再依赖完整轮廓。
+7. 非保护形状保持平面和矩形化，没有曲线剪影、立体侧面、光滑 3D 深度或额外科幻元素。
+8. 原图的画幅、视点、明暗组织和主要色彩关系仍然成立。
+
+## 它刻意避免什么
+
+- 照片上覆盖均匀 CRT 横线；
+- 平滑、无层次的纯色矢量块；
+- 随机像素噪点和细碎马赛克；
+- pixel sorting、RGB 分离和扭曲拖影；
+- 波浪条纹、纸张肌理、画布纹理、斑点和笔触；
+- 霓虹赛博朋克、全息图、镀铬和无来源科幻装饰；
+- 把每个背景物体都保留成清晰剪影；
+- 擅自增加文字、Logo 或水印；
+- 复制特定艺术家的现成作品或个人化笔法。
+
+## 常见问题
+
+### 看起来还是一张加了横线的照片
+
+问题通常不是线条密度不足，而是背景没有被结构性替换。应重新处理天空、地面和次要物体，将它们真正重组为平面色域。
+
+### 摩托车、雨伞、垃圾桶或花盆仍然太具体
+
+删除车轮、把手、镜面、伞骨、枝叶等部件和连续轮廓，只留下原位置附近的矩形颜色标记。
+
+### 色块分布正确，但画面太干净
+
+不要添加通用噪点。应在每个色块内部使用该区域自身的近邻色，改变线条宽度、间距、透明度、断点、融合和渐隐。
+
+### 天空和道路比建筑更写实
+
+提高它们的转化程度，而不是简单提高对比度。天空和地面仍应是大色域，只需加入更细、更克制的同语言色层。
+
+### 画面变成杂乱马赛克
+
+减少小色块，把同类细节合并为更大的主色色域。复杂场景应压缩得更多，而不是翻译得更多。
+
+### 原来的场所认不出来了
+
+恢复主要体块位置、地平线、远景开口、原图色彩节奏和少量垂直锚点，不要恢复具体物件细节。
+
+### 人物或动作物品发生变形
+
+扩大保护行动单元的干净区域，只重新生成失败的环境层。不要用重绘人物来解决背景问题。
+
+## 安装与调用
+
+### macOS / Linux
+
+```bash
+mkdir -p "$HOME/.codex/skills"
+git clone --depth 1 https://github.com/ximisins-collab/urban-scanline-mirage.git "$HOME/.codex/skills/urban-scanline-mirage"
+```
+
+### Windows PowerShell
+
+```powershell
+$skillRoot = Join-Path $env:USERPROFILE '.codex\skills'
+New-Item -ItemType Directory -Force -Path $skillRoot | Out-Null
+git clone --depth 1 https://github.com/ximisins-collab/urban-scanline-mirage.git (Join-Path $skillRoot 'urban-scanline-mirage')
+```
+
+也可以[下载当前 ZIP](https://github.com/ximisins-collab/urban-scanline-mirage/archive/refs/heads/main.zip)，解压后把包含 `SKILL.md` 的完整文件夹放到：
 
 ```text
 ~/.codex/skills/urban-scanline-mirage
 ```
 
-The skill is automatically discoverable by its name and can also be invoked explicitly as `$urban-scanline-mirage`.
+安装后，在下一轮支持 Skill 调用的 Codex 对话中使用：
 
-## Usage
+```text
+$urban-scanline-mirage
+```
 
-Provide a source photo and ask Codex to use `urban-scanline-mirage`. The image-generation sub-skill is required for edits, and the result should be inspected before delivery.
+仓库文件夹已经存在时，请先确认它是否属于本仓库，避免覆盖自己的修改。
 
-## License
+### 更新
 
-MIT. See [LICENSE](LICENSE).
+macOS / Linux：
+
+```bash
+git -C "$HOME/.codex/skills/urban-scanline-mirage" pull --ff-only
+```
+
+Windows PowerShell：
+
+```powershell
+git -C (Join-Path $env:USERPROFILE '.codex\skills\urban-scanline-mirage') pull --ff-only
+```
+
+## 运行环境
+
+- Skill 负责分析照片、建立保护关系、组织提示词、调用图像编辑并检查结果。
+- 实际图像生成依赖运行环境提供的 `imagegen` 或等效图像编辑能力。
+- 本仓库不包含图像模型、API 密钥、付费额度或第三方生成服务。
+- 图像工具不可用时，Skill 无法独立产出最终位图；可以先提供转换方案和编辑提示词。
+- 输出稳定性仍受原图质量、主体遮挡、图像模型能力和生成随机性影响，应通过实际结果验收。
+
+## 仓库内容
+
+| 文件 | 用途 |
+| --- | --- |
+| [`SKILL.md`](SKILL.md) | 城市扫描线幻景的核心执行规则、修正方法与质量门槛 |
+| [`agents/openai.yaml`](agents/openai.yaml) | Codex 中的展示名称、默认提示和自动调用策略 |
+| `README.md` | 项目介绍、快速使用、安装和公开说明 |
+| [`LICENSE`](LICENSE) | MIT 开源许可证 |
+| `.gitignore` | 排除系统文件、临时文件和本地环境内容 |
+
+## 隐私与公开素材
+
+仓库当前不包含用户原始照片、测试生成图、本地临时路径或私人文件。
+
+未来加入示例图库时，只应上传已经获得公开许可的图片。建议使用描述性文件名、清理图片元数据，并避免出现私人住址、联系方式、清晰证件、车牌或其他不必要的个人信息。
+
+## 许可证
+
+本项目使用 [MIT License](LICENSE)。你可以依照许可证使用、复制、修改和分发本 Skill。
+
+## English Overview
+
+Urban Scanline Mirage transforms city, street and architectural photographs into calm rectilinear scanline collages. It preserves a focal person and the objects physically required by their action as a crisp photographic unit, while rebuilding the remaining environment from source-derived colour fields, varied horizontal chromatic strata and sparse vertical anchors.
+
+The skill does not apply a uniform scanline filter. Sky, ground, architecture, foliage and secondary objects are structurally reconstructed at a consistent level of abstraction. Image output depends on the image-generation or editing tools available in the host environment.
+
+---
+
+真正稳定的风格，不是让每条线都一样明显。
+
+它让人物继续生活在真实的一刻里，让城市退回到颜色、节奏和空间记忆。
