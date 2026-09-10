@@ -86,7 +86,41 @@ git -C "$HOME/.codex/skills/urban-scanline-mirage" pull --ff-only
 
 ## 示例图片
 
-示例图待补充。建议上传 3–5 组已获公开许可的“原图 / 生成结果”对照图片，并在上传前清理不必要的个人信息和图片元数据。
+### 1. 风筝与清水混凝土建筑
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![风筝与清水混凝土建筑原图](examples/01-kite-original.png) | ![风筝与清水混凝土建筑扫描线效果](examples/01-kite-scanline.png) |
+
+### 2. 现代建筑中的行人
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![现代建筑行人原图](examples/02-modern-walk-original.png) | ![现代建筑行人扫描线效果](examples/02-modern-walk-scanline.png) |
+
+### 3. 雨夜巷道
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![雨夜巷道原图](examples/03-rainy-alley-original.png) | ![雨夜巷道扫描线效果](examples/03-rainy-alley-scanline.png) |
+
+### 4. 修理自行车
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![修理自行车原图](examples/04-bicycle-repair-original.png) | ![修理自行车扫描线效果](examples/04-bicycle-repair-scanline.png) |
+
+### 5. 楼道中的随身听
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![楼道随身听原图](examples/05-hallway-music-original.png) | ![楼道随身听扫描线效果](examples/05-hallway-music-scanline.png) |
+
+### 6. 林荫街道
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![林荫街道原图](examples/06-tree-lined-street-original.png) | ![林荫街道扫描线效果](examples/06-tree-lined-street-scanline.png) |
 
 ## 许可证
 
