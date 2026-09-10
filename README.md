@@ -49,7 +49,9 @@ Skill 会自动分析主体与空间，调用可用的图像编辑工具生成�
 | 柱子或树干太多 | 合并重复竖向结构，只保留最低限度的空间锚点 |
 | 人物发生变形 | 扩大人物与动作物品的保护区域，只重新生成环境层 |
 
-## 安装
+## 在 Codex 中使用
+
+先安装 Skill。
 
 ### macOS / Linux
 
@@ -72,16 +74,33 @@ git clone --depth 1 https://github.com/ximisins-collab/urban-scanline-mirage.git
 ~/.codex/skills/urban-scanline-mirage
 ```
 
-## 更新
+安装后重新打开 Codex，上传原图并输入“快速开始”中的命令。
+
+### 更新
 
 ```bash
 git -C "$HOME/.codex/skills/urban-scanline-mirage" pull --ff-only
 ```
 
+## 在豆包中使用
+
+本仓库采用 Codex Skill 格式。在豆包中可任选一种方式使用：
+
+- **创建智能体：** 打开 [`SKILL.md`](SKILL.md)，把内容复制到豆包智能体的设定描述中；
+- **直接对话：** 同时上传原图和本仓库的 `SKILL.md` 文件。
+
+然后输入：
+
+```text
+请阅读并严格遵循城市扫描线幻景规则，使用你的图片编辑能力修改这张照片，直接生成一张最终结果。
+```
+
+豆包不使用 `$urban-scanline-mirage` 调用语法；不同图像模型生成的细节可能存在差异。
+
 ## 运行要求
 
-- 需要支持 Skill 调用的 Codex 环境；
-- 需要可用的 `imagegen` 或等效图像编辑能力；
+- Codex 需要支持 Skill 调用，并具备可用的 `imagegen` 或等效图像编辑能力；
+- 豆包需要具备图片编辑或图片生成功能；
 - 本仓库不包含图像模型、API 密钥或生成额度。
 
 ## 示例图片
