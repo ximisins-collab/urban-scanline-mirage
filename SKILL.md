@@ -9,6 +9,8 @@ Rebuild a real urban scene as an ordered spatial memory. The result is not a pho
 
 **REQUIRED SUB-SKILL:** Use `imagegen` for the image edit and inspect the result before delivery.
 
+**ONE-SHOT DEFAULT:** Generate exactly one image for each user request. Inspect that result once, then deliver it. Do not automatically generate a correction pass. If the inspection finds a defect, state it briefly and wait for the user to explicitly request another generation.
+
 ## Protected Action Unit
 
 Protect the focal person or small focal group together with:
@@ -73,7 +75,7 @@ If the lines dominate the thumbnail, reduce their contrast rather than removing 
 4. Replace every non-protected zone with oversized rectilinear fields. Fill each field with long, hairline, low-contrast source-derived horizontal chromatic strata that read as the field's material, not a global overlay or horizontal blur.
 5. Reduce secondary types to rectangular markers. Remove wheels, mirrors, handles, ribs, leaves, fixtures, readable object silhouettes, and other literal components.
 6. Reintroduce only the minimum vertical anchors needed to recognize the place. Merge repeated trunks, posts, façade edges, or columns into broader masses instead of recreating a perspective corridor.
-7. Generate and inspect twice: first as a thumbnail for large-field calm and figure hierarchy, then at full resolution for fine local strata and crisp line definition. Revise only the failing layer.
+7. Generate exactly once. Inspect the same result at thumbnail scale for large-field calm and figure hierarchy, then at full resolution for fine local strata and crisp line definition. Deliver that result after the inspection. If a layer fails, report the issue without generating again.
 
 ## Sky and Ground Consistency
 
@@ -101,11 +103,11 @@ Sky and ground must reach the same **degree of transformation** as the buildings
 | Lines dominate at thumbnail size | Reduce line contrast and black gaps while preserving dense micro-strata. Large colour fields must remain the first reading. |
 | Fields look flat when enlarged | Add subtle near-neighbour hue, temperature, brightness, and saturation drift inside the field; do not add noise or an overlay grid. |
 | Scene identity disappears | Restore horizon, dominant mass positions, source colour rhythm, distant opening, and a few vertical anchors—not object detail. |
-| Protected subject distorts | Expand the clean protection zone around the action unit and regenerate that layer. |
+| Protected subject distorts | Report the distortion and recommend expanding the clean protection zone on a user-requested revision. Do not regenerate automatically. |
 
-## Quality Gate
+## One-Pass Quality Check
 
-Deliver only when all are true:
+Inspect the single generated result against these criteria. Deliver it after this check. If any item fails, name the failed item briefly and wait for the user to request a revision:
 
 1. The protected action unit is the only natural photographic contour and remains anatomically and spatially unchanged.
 2. The original place is recognizable from massing, horizon, colour rhythm, and sparse anchors rather than literal background objects.
