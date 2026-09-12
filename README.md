@@ -1,6 +1,50 @@
 # 城市扫描线幻景
 
+真实与抽象的边界间，弥漫着一层安静的疏离感。当城市的轮廓渐渐模糊，我们还记得谁？或许记不清街道的每一处细节，却始终记得某个人途经的瞬间。
+
+秩序井然的空间里，留存着人的温度；理性的场景与自然的动作彼此映照，让一次等待、一段步行、一次驻足、一场偶遇、一眼回望，这些最平凡的日常，都成为值得被静静观看的风景。
+
+这套视觉创作方法已整理为「城市扫描线幻景」Skill，面向所有人免费开源。欢迎你从自己的生活现场出发，去发现人与城市之间的另一种关系。
+
 `urban-scanline-mirage` 是一个用于城市、街道和建筑照片的 Codex Skill。它保留人物及其行动关系，把其余环境重构为来源于原图色彩的矩形色域与细密横向扫描线。
+
+## 示例图片
+
+### 1. 风筝与清水混凝土建筑
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![风筝与清水混凝土建筑原图](examples/01-kite-original.png) | ![风筝与清水混凝土建筑扫描线效果](examples/01-kite-scanline.png) |
+
+### 2. 现代建筑中的行人
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![现代建筑行人原图](examples/02-modern-walk-original.png) | ![现代建筑行人扫描线效果](examples/02-modern-walk-scanline.png) |
+
+### 3. 雨夜巷道
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![雨夜巷道原图](examples/03-rainy-alley-original.png) | ![雨夜巷道扫描线效果](examples/03-rainy-alley-scanline.png) |
+
+### 4. 修理自行车
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![修理自行车原图](examples/04-bicycle-repair-original.png) | ![修理自行车扫描线效果](examples/04-bicycle-repair-scanline.png) |
+
+### 5. 楼道中的随身听
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![楼道随身听原图](examples/05-hallway-music-original.png) | ![楼道随身听扫描线效果](examples/05-hallway-music-scanline.png) |
+
+### 6. 林荫街道
+
+| 原图 | 生成结果 |
+| :---: | :---: |
+| ![林荫街道原图](examples/06-tree-lined-street-original.png) | ![林荫街道扫描线效果](examples/06-tree-lined-street-scanline.png) |
 
 ## 快速开始
 
@@ -92,51 +136,13 @@ git -C "$HOME/.codex/skills/urban-scanline-mirage" pull --ff-only
 
 原图决定人物、构图和配色；固定参考图只提供细横线与矩形重构的视觉标准。不要只发送本地图片路径。
 
-这是手动使用的图像编辑规则与参考图，不是豆包原生 Skill 安装包。**豆包效果尚未实测，不保证与 Codex 样片一致。**
+这是手动使用的图像编辑规则与参考图，不是豆包原生 Skill 安装包。**不保证与 Codex 样片一致。**
 
 ## 运行要求
 
 - Codex 需要支持 Skill 调用，并具备可用的 `imagegen` 或等效图像编辑能力；
 - 豆包配套用法需要当前入口支持同时上传原图与风格参考图进行图片编辑；
 - 本仓库不包含图像模型、API 密钥或生成额度。
-
-## 示例图片
-
-### 1. 风筝与清水混凝土建筑
-
-| 原图 | 生成结果 |
-| :---: | :---: |
-| ![风筝与清水混凝土建筑原图](examples/01-kite-original.png) | ![风筝与清水混凝土建筑扫描线效果](examples/01-kite-scanline.png) |
-
-### 2. 现代建筑中的行人
-
-| 原图 | 生成结果 |
-| :---: | :---: |
-| ![现代建筑行人原图](examples/02-modern-walk-original.png) | ![现代建筑行人扫描线效果](examples/02-modern-walk-scanline.png) |
-
-### 3. 雨夜巷道
-
-| 原图 | 生成结果 |
-| :---: | :---: |
-| ![雨夜巷道原图](examples/03-rainy-alley-original.png) | ![雨夜巷道扫描线效果](examples/03-rainy-alley-scanline.png) |
-
-### 4. 修理自行车
-
-| 原图 | 生成结果 |
-| :---: | :---: |
-| ![修理自行车原图](examples/04-bicycle-repair-original.png) | ![修理自行车扫描线效果](examples/04-bicycle-repair-scanline.png) |
-
-### 5. 楼道中的随身听
-
-| 原图 | 生成结果 |
-| :---: | :---: |
-| ![楼道随身听原图](examples/05-hallway-music-original.png) | ![楼道随身听扫描线效果](examples/05-hallway-music-scanline.png) |
-
-### 6. 林荫街道
-
-| 原图 | 生成结果 |
-| :---: | :---: |
-| ![林荫街道原图](examples/06-tree-lined-street-original.png) | ![林荫街道扫描线效果](examples/06-tree-lined-street-scanline.png) |
 
 ## 许可证
 
